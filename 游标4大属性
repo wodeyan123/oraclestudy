@@ -1,0 +1,32 @@
+属性                  返回值类型                 作用
+sql%isopen            布尔型                     判断游标是否'开启'
+sql%found             布尔型                     判断游标是否'获取'到值
+sql%notfound          布尔型                     判断游标是否'没有获取'到值（常用于“退出循环”）
+sql%rowcount          整形                       ‘当前’成功执行的数据行数（非“总记录数”）
+
+简单说：退出循环的必要条件：fetch语句执行成功+第一次fetch的值返回null
+
+-- **************************************************************
+-- 功能：循环读取数据
+-- 核心：先后顺序 = 先 fetch ... 再 exit when *%notfound
+-- ************************************************************** 
+declare
+  cursor cur_stu_info is
+    select * from stu_info t where t.id = 9;
+  v_stu_info cur_stu_info%rowtype;
+begin
+
+  open cur_stu_info;
+
+  loop
+    fetch cur_stu_info
+      into v_stu_info; -- 可测试，这段 fetch 放在 %notfound 后面
+  
+    exit when cur_stu_info%notfound;
+  
+    dbms_output.put_line('该语句不会执行，因为没有 id = 9 的记录');
+  
+  end loop;
+
+  close cur_stu_info;
+end;
