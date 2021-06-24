@@ -14,7 +14,7 @@ declare
 --1 声明游标
 cursor cur_stu_info is
 select * from stu_info;
-v_stu_info cur_stu_info%type;
+v_stu_info cur_stu_info%rowtype;
 begin
 --2 开启游标
 open cur_stu_info;
