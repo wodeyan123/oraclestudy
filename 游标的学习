@@ -1,0 +1,27 @@
+--测试的基础数据
+create table stu_info(
+       id number(3),
+       name varchar2(30),
+       sex varchar2(2)
+);
+
+insert into stu_info(id,name,sex) values(1,'游标1','女');
+insert into stu_info(id,name,sex) values(2,'游标2','男');
+commit;
+
+--游标语法：4个步骤，获取学生信息（stu_info）的记录
+declare
+--1 声明游标
+cursor cur_stu_info is
+select * from stu_info;
+v_stu_info cur_stu_info%type;
+begin
+--2 开启游标
+open cur_stu_info;
+--3 获取数据（一次获取一行）
+fetch cur_stu_info 
+into v_stu_info;
+dbms_output.put_line(v_stu_info.id||'：'||v_stu_info.name);
+--4 关闭游标
+close cur_stu_info;
+end;
